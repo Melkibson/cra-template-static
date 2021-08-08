@@ -22,7 +22,7 @@ export const GlobalStyle = createGlobalStyle`
     
     {
       padding: 0px;
-      margin: 0px;
+      margin: 0px !important;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
@@ -258,8 +258,8 @@ const paramsContainer = props => ({
 })
 
 export const Column = styled.div.attrs(props => {paramsContainer(props)})`
-    height: ${props => props.height};
-    width:  ${props => props.width};
+    height: ${props => props.height || 'auto'};
+    width:  ${props => props.width || '100%'};
     display: flex;
     flex-direction: column;
     align-items: ${props => props.align};
@@ -268,8 +268,8 @@ export const Column = styled.div.attrs(props => {paramsContainer(props)})`
 /*----------  ROW  ----------*/
 
 export const Row = styled.div.attrs(props => {paramsContainer(props)})`
-    height: ${props => props.height};
-    width:  ${props => props.width};
+    height: ${props => props.height || 'auto'};
+    width:  ${props => props.width || '100%'};
     display: flex;
     align-items: ${props => props.align};
     justify-content:${props => props.justify} ;
