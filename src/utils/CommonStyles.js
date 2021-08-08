@@ -12,6 +12,7 @@ export const colors = {
 
 /*=====  End of COLORS  ======*/
 export const GlobalStyle = createGlobalStyle`
+    
     @font-face {
       font-family: '';
       src:url(${''});
@@ -215,7 +216,6 @@ export const bp = {
 
 /*=====  End of BREAK POINT  ======*/
 
-
 /*----------  SECTION  ----------*/
 export const Section = styled.div.attrs(props =>({
     height: props.height,
@@ -250,48 +250,49 @@ export const Grid = styled.div.attrs(props =>({
 `
 /*----------  COLUMN  ----------*/
 
-export const Column = styled.div.attrs(props => ({
-    justify: props.justify,
+const paramsContainer = props => ({
+    justify: props.justify || 'center',
     align: props.align || 'center',
     width: props.width || '100%',
     height: props.height || '100%',
-}))`
+})
+
+export const Column = styled.div.attrs(props => {paramsContainer(props)})`
     height: ${props => props.height};
     width:  ${props => props.width};
     display: flex;
     flex-direction: column;
     align-items: ${props => props.align};
+    justify-content:${props => props.justify} ;
 `
 /*----------  ROW  ----------*/
 
-export const Row = styled.div.attrs(props => ({
-    justify: props.justify,
-    align: props.align || 'center',
-    width: props.width || '100%',
-    height: props.height || '100%',
-}))`
+export const Row = styled.div.attrs(props => {paramsContainer(props)})`
     height: ${props => props.height};
     width:  ${props => props.width};
     display: flex;
     align-items: ${props => props.align};
+    justify-content:${props => props.justify} ;
     @media screen and (max-width: ${bp.mobile}px){
      flex-wrap: wrap;
   }
 `
 /*----------  HEADING  ----------*/
-
+const paramsHeading = props => ({
+    font: props.font,
+    color: props.color,
+    textAlign: props.align || 'center',
+    lineHeight: props.lineHeight,
+})
 /*----------  H1  ----------*/
 
-export const H1 = styled.h1.attrs(props => ({
-    textAlign: props.align || 'center',
-    color: props.color,
-    lineHeight: props.lineHeight,
-}))`
+export const H1 = styled.h1.attrs(props => {paramsHeading(props)})`
   ${FontSerif_900};
   line-height: ${props => props.lineHeight};
   color: ${props => props.color};
   font-size: ${textSize.desktop.h1}px;
   text-align: ${props => props.textAlign};
+  font-family: ${props => props.font};
   @media screen and (max-width: ${bp.tablet}px){
     font-size: ${textSize.tablet.h1}px;
   }
@@ -301,17 +302,14 @@ export const H1 = styled.h1.attrs(props => ({
 `
 /*----------  H2  ----------*/
 
-export const H2 = styled.h2.attrs(props => ({
-    textAlign: props.align || 'center',
-    color: props.color,
-    lineHeight: props.lineHeight,
-
-}))`
+export const H2 = styled.h2.attrs(props => {paramsHeading(props)})`
   ${FontSerif_700};
   color: ${props => props.color};
   font-size: ${textSize.desktop.h2}px;
   text-align: ${props => props.textAlign};
   line-height: ${props => props.lineHeight};
+    font-family: ${props => props.font};
+
 
   @media screen and (max-width: ${bp.tablet}px){
     font-size: ${textSize.tablet.h2}px;
@@ -322,16 +320,13 @@ export const H2 = styled.h2.attrs(props => ({
 `
 /*----------  H3  ----------*/
 
-export const H3 = styled.h3.attrs(props => ({
-    textAlign: props.align || 'center',
-    color: props.color,
-    lineHeight: props.lineHeight,
-}))`
+export const H3 = styled.h3.attrs(props => {paramsHeading(props)})`
   ${Font_500};
   line-height:  ${props => props.lineHeight};;
   color: ${props => props.color};
   text-align: ${props => props.textAlign};
   font-size: ${textSize.desktop.h3}px;
+    font-family: ${props => props.font};
   @media screen and (max-width: ${bp.tablet}px){
     font-size: ${textSize.tablet.h3}px;
   }
@@ -340,8 +335,7 @@ export const H3 = styled.h3.attrs(props => ({
   }
 `
 /*----------  PARAGRAPH REGULAR  ----------*/
-
-export const Paragraph = styled.span.attrs(props => ({
+const paramsPg = props => ({
     font: props.font,
     color: props.color,
     textAlign: props.align || 'center',
@@ -349,7 +343,9 @@ export const Paragraph = styled.span.attrs(props => ({
     fontSizeDesktop: props.fontSizeDesktop,
     fontSizeTablet: props.fontSizeTablet,
     fontSizeMobile: props.fontSizeMobile,
-}))`
+})
+
+export const Paragraph = styled.span.attrs(props => {paramsPg(props)})`
   font-family: ${props => props.font};
   color: ${props => props.color};
   font-size:  ${props => props.fontSizeDesktop};
@@ -365,15 +361,16 @@ export const Paragraph = styled.span.attrs(props => ({
 `
 
 /*----------  LINKS  ----------*/
-
-export const DefaultLink = styled.a.attrs(props => ({
+const paramsLink = props => ({
     font: props.font,
     color: props.color,
     hoverColor: props.hoverColor,
     fontSizeDesktop: props.fontSizeDesktop,
     fontSizeTablet: props.fontSizeTablet,
     fontSizeMobile: props.fontSizeMobile,
-}))`
+})
+
+export const DefaultLink = styled.a.attrs(props => (paramsLink(props)))`
   cursor: pointer;
   font-family: ${props => props.font};
   color: ${props => props.color};
@@ -395,15 +392,15 @@ export const DefaultLink = styled.a.attrs(props => ({
 `
 
 /*----------  INPUT  ----------*/
-
-const DefaultInput = styled.input.attrs(props => ({
+const paramsInput = props => ({
     border: props.border || 'none',
     borderRad: props.borderRad || 0,
     type: props.type || 'text',
     font: props.font,
     fontSize: props.fontSize,
     color: props.color,
-}))`
+})
+const DefaultInput = styled.input.attrs(props => (paramsInput(props)))`
   background: transparent;
   box-shadow: none;
   transition: all .8s linear;
@@ -417,14 +414,18 @@ const DefaultInput = styled.input.attrs(props => ({
   }
 `
 
-export const DefaultTextArea = styled.textarea.attrs(props => ({
+/*----------  TEXTAREA  ----------*/
+
+const paramsTextArea = props => ({
     border: props.border || 'none',
     borderRad: props.borderRad || 0,
     font: props.font,
     fontSize: props.fontSize,
     color: props.color,
     resize: props.resize || 'none'
-}))`
+})
+
+export const DefaultTextArea = styled.textarea.attrs(props => (paramsTextArea(props)))`
     font-family: ${props => props.font};
     font-size:  ${props => props.fontSize};
     color:  ${props => props.color};
@@ -434,17 +435,19 @@ export const DefaultTextArea = styled.textarea.attrs(props => ({
 `
 /*----------  BUTTONS  ----------*/
 
-export const Button = styled.button.attrs(props => ({
+const paramsButton = props => ({
     height: props.height,
     width: props.width,
     background: props.background,
     hoverBackground: props.hoverBackground,
     color: props.color,
     hoverColor:props.hoverColor,
-    border: props.border || 'none',
-    hoverBorder: props.hoverBorder || 'none',
+    border: props.border || '0',
+    hoverBorder: props.hoverBorder || '0',
     borderRad: props.borderRad || 0,
-}))`
+})
+
+export const Button = styled.button.attrs(props => (paramsButton(props)))`
     display: flex;
     height: ${props => props.height};
     width: ${props => props.width};
