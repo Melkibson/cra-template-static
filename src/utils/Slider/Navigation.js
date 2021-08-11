@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {useState, useCallback, useMemo} from 'react'
 import {
     Row,
     colors, Column
@@ -50,12 +51,58 @@ const NavButton = styled.button.attrs(props => ({
 `
 
 
-const Navigation = ({navPrev, navNext}) => {
+const Navigation = ({element}) => {
+
+    const initialState = useMemo(() => {
+        return {index: 0, length: 1}
+    }, [])
+
+    const [state, setState] = useState(initialState)
+    const [slide, setSlide] = useState(0)
+    const [childCount, setChildCount] = useState(0)
+
+    const callback = useCallback((direction) => {
+
+        if(!element){
+            return
+        }
+
+        setSlide(element.offsetWidth)
+        setChildCount(element.childNodes.length)
+
+        if (state.length === childCount && state.index === 0){
+            setState(initialState.length)
+        }
+
+        if(direction === 'next'){
+            if (state.length < childCount) {
+                setState(prevState => ({
+                    ...prevState,
+                    index: state.index + slide,
+                    length: state.length + 1
+                }))
+            }
+        }
+        if(direction === 'prev'){
+            if (state.length <= childCount && state.index > 0) {
+                setState(prevState => ({
+                    ...prevState,
+                    index: state.index - slide,
+                    length: state.length - 1
+                }))
+            }
+        }
+        return element.style.transform = `translateX(-${state.index}px)`;
+
+    }, [element, state, initialState, childCount, slide])
+
     return(
         <NavContainer
             justify={'space-between'}
         >
-            <NavButton ref={navPrev}>
+            <NavButton onClick={() => {
+                callback('prev')
+            }}>
                 <NavIcon
                     left
                     height={params.btn}
@@ -74,7 +121,9 @@ const Navigation = ({navPrev, navNext}) => {
                     />
                 </NavIcon>
             </NavButton>
-            <NavButton ref={navNext}>
+            <NavButton ref={callback} onClick={() => {
+                callback('next')
+            }}>
                 <NavIcon
                     height={params.btn}
                     width={params.btn}
