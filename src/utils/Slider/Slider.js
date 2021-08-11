@@ -6,13 +6,12 @@ import {
     Row,
 } from "../CommonStyles";
 
-const Element = styled.div`
-`
+
 const SliderContainer = styled(Row)`
   width: 100%;
   height: 100%;
   transition: all 0.75s ease-in;
-    position: relative;
+  position: relative;
 `
 const Slider = () => {
     const [element, setElement] = useState('')
@@ -22,11 +21,10 @@ const Slider = () => {
         }
     }, [])
 
-
     return (
         <Fragment>
             <SliderContainer ref={ref}>
-                <SliderRow  el={<Element>1</Element>} rows={3}/>
+                <SliderRow rows={3}/>
             </SliderContainer>
             <Navigation element={element}/>
         </Fragment>

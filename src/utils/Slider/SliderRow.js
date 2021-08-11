@@ -1,6 +1,8 @@
 import styled from "styled-components";
+import Content from "./Content";
 
 import {Row} from "../CommonStyles";
+import {useEffect, useMemo} from "react";
 
 const Container = styled(Row)`
   min-width: 100%;
@@ -13,15 +15,20 @@ const Container = styled(Row)`
   }
 `
 
-const SliderRow = ({el ,rows}) => {
-    const sliderRows = []
-    for (let i = 0 ; i < rows; i++){
-        sliderRows.push(
-            <Container key={i} height={'100%'} width={'100%'} justify={'center'} align={'center'}>
-                {el}
-            </Container>
-        )
-    }
+const SliderRow = ({rows}) => {
+    const sliderRows = useMemo(() => { return []}, [])
+    useEffect(() => {
+
+
+        for (let i = 0 ; i < rows; i++){
+            sliderRows.push(
+                <Container key={i} height={'100%'} width={'100%'} justify={'center'} align={'center'}>
+                    <Content id={i}/>
+                </Container>
+            )
+        }
+    }, [rows, sliderRows])
+
     return(
         sliderRows
     )

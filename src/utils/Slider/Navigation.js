@@ -50,7 +50,6 @@ const NavButton = styled.button.attrs(props => ({
   }
 `
 
-
 const Navigation = ({element}) => {
 
     const initialState = useMemo(() => {
@@ -62,7 +61,6 @@ const Navigation = ({element}) => {
     const [childCount, setChildCount] = useState(0)
 
     const callback = useCallback((direction) => {
-
         if(!element){
             return
         }
@@ -94,7 +92,7 @@ const Navigation = ({element}) => {
         }
         return element.style.transform = `translateX(-${state.index}px)`;
 
-    }, [element, state, initialState, childCount, slide])
+    }, [element, state, initialState.length, childCount, slide])
 
     return(
         <NavContainer
